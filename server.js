@@ -1,17 +1,23 @@
-express = require('express');
+const express = require('express');
+const hbs = require('hbs');
 
 var app = express();
+
+app.set('view engine','hbs');
 
 app.use(express.static(__dirname+'/dist'));
 
 app.get('/',(req,res)=>{
     //res.send("<h1>Hello there</h1>");
-    res.send({'name' : 'abbas'});
+    res.render('home.hbs');
 });
 
-app.get('/about',()=>
+app.get('/about',(req,res)=>
 {
-    res.send('About works');
+    res.render('about.hbs',{
+        'title' : 'About Page',
+        'currentYear' : new Date().getFullYear()
+    });
 });
 
 
