@@ -1,5 +1,6 @@
 const express = require('express');
 const hbs = require('hbs');
+const fs= require('fs');
 
 var app = express();
 
@@ -13,6 +14,22 @@ hbs.registerHelper('screamIt',(ab)=>{
 app.set('view engine','hbs');
 
 app.use(express.static(__dirname+'/dist'));
+app.use((req,res,next)=>{
+    now = new Date().toString();
+    log = `${now}: ${req.url} ${req.method}`;
+    console.log(log)
+    fs.appendFile('server.log',log+'\n',(err)=>{
+        if(err)
+        {
+            console.log('Uncable to write')
+        }
+    })
+    next();
+})
+
+app.use((req,res,next)=>{
+    res.render('maintenance.hbs')
+})
 
 app.get('/',(req,res)=>{
     //res.send("<h1>Hello there</h1>");
